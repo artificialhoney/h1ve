@@ -1,22 +1,10 @@
 version: "2"
 services:
-  sync:
-    image: quay.io/soketi/soketi
-    container_name: h1ve-{{ name }}-sync
-    volumes:
-      - ./h1ve.json:/app/config/h1ve.json
-    command:
-      - "node"
-      - "/app/dist/server.js"
-      - "--config"
-      - "/app/config/h1ve.json"
   app:
-    image: devilbox/python-flask
+    image: jazzdd/alpine-flask
     container_name: h1ve-{{ name }}-app
-    environment:
-      - FLASK_PROJECT=app
     volumes:
-        - ./app:/shared/httpd/app
+        - ./app:/app
 
 {% if services is defined %}
 {% for service in services %}
