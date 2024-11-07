@@ -1,0 +1,4 @@
+# h1ve
+.DS_Store
+.venv
+h1ve/**/docker-compose.yml

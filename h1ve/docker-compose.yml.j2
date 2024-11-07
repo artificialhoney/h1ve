@@ -1,0 +1,56 @@
+version: "2"
+services:
+  sync:
+    image: quay.io/soketi/soketi
+    container_name: h1ve-{{ name }}-sync
+    volumes:
+      - ./h1ve.json:/app/config/h1ve.json
+    command:
+      - "node"
+      - "/app/dist/server.js"
+      - "--config"
+      - "/app/config/h1ve.json"
+  app:
+    image: devilbox/python-flask
+    container_name: h1ve-{{ name }}-app
+    environment:
+      - FLASK_PROJECT=app
+    volumes:
+        - ./app:/shared/httpd/app
+
+{% for service in services %}
+  {{ service }}:
+    image: {{ services[service].image }}
+    container_name: h1ve-{{ name }}-{{ service }}
+    restart: unless-stopped
+{% if services[service].command is defined %}
+    command:
+{% for command in services[service].command %}
+      - {{ command }}
+{% endfor %}
+{% endif %}
+{% if services[service].ports is defined %}
+    ports:
+{% for port in services[service].ports %}
+      - {{ port }}
+{% endfor %}
+{% endif %}
+    volumes:
+{% if services[service].config is defined %}
+      - ${H1VE_CONFIG}/{{ name }}/{{ service }}:{{ services[service].config }}
+{% endif %}
+{% if services[service].volumes is defined %}
+{% for volume in services[service].volumes %}
+      - ${H1VE_DATA}/{{ name }}/{{ service }}{{ volume }}:{{ volume }}
+{% endfor %}
+{% endif %}
+{% if services[service].socket == True %}
+      - /var/run/docker.sock:/var/run/docker.sock
+{% endif %}
+    networks:
+      - h1ve
+{% endfor %}
+
+networks:
+  h1ve:
+    external: true

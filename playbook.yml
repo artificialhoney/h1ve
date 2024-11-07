@@ -1,0 +1,110 @@
+---
+# docker compose -f ./h1ve/docker-compose.yml up -d --force-recreate
+# docker compose -f ./h1ve/h1ve/docker-compose.yml up -d --force-recreate
+# docker compose -f ./layers/h1ve/docker-compose.yml up -d
+- name: Install Docker
+  hosts: localhost
+  tasks:
+    - name: Install aptitude
+      ansible.builtin.apt:
+        name: aptitude
+        state: present
+        update_cache: true
+      tags:
+        - Docker
+    - name: Install required system packages
+      ansible.builtin.apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: present
+        update_cache: true
+      tags:
+        - Docker
+
+    - name: Add Docker GPG apt Key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/raspbian/gpg
+        state: present
+      tags:
+        - Docker
+
+    - name: Add Docker Repository
+      ansible.builtin.apt_repository:
+        repo: deb https://download.docker.com/linux/raspbian bookworm stable
+        state: present
+      tags:
+        - Docker
+
+    - name: Update apt and install docker-ce
+      ansible.builtin.apt:
+        name: docker-ce
+        state: present
+        update_cache: true
+      tags:
+        - Docker
+
+- name: Setup environment
+  hosts: localhost
+  vars_prompt:
+    - name: h1ve_data
+      prompt: Please enter the H1ve data directory path
+      private: false
+      default: /srv/h1ve
+
+    - name: h1ve_config
+      prompt: Please enter the H1ve config directory path
+      private: false
+      default: '~/.h1ve'
+  tasks:
+    - name: Setup environment
+      ansible.builtin.copy:
+        content: |
+          H1VE_DATA={{ h1ve_data }}
+          H1VE_CONFIG={{ h1ve_config }}
+        dest: '{{ playbook_dir }}/h1ve/.env'
+        owner: pi
+        group: pi
+        mode: '0644'
+      tags:
+        - Setup
+
+- name: Install H1ve
+  hosts: localhost
+
+  tasks:
+    - name: Create network
+      community.docker.docker_network:
+        name: h1ve
+      tags:
+        - Install
+    - name: Include h1ve.yml
+      ansible.builtin.include_vars:
+        file: '{{ playbook_dir }}/h1ve/h1ve/h1ve.yml'
+      tags:
+        - Install
+    - name: Create docker-compose.yml
+      ansible.builtin.template:
+        src: '{{ playbook_dir }}/h1ve/h1ve/docker-compose.yml.j2'
+        dest: '{{ playbook_dir }}/h1ve/h1ve/docker-compose.yml'
+        owner: pi
+        group: pi
+        mode: '0644'
+      tags:
+        - Install
+
+    - name: Start H1ve
+      community.docker.docker_compose:
+        project_src: '{{ playbook_dir }}/h1ve/h1ve'
+        files:
+          - docker-compose.yml
+        env_file: '{{ playbook_dir }}/h1ve/.env'
+        state: present
+      register: output
+      tags:
+        - Install

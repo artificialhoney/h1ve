@@ -1,0 +1,13 @@
+{
+  "appManager.array.apps": [
+    {
+      "id": "h1ve",
+      "webhooks": [
+        {
+          "url": "https://...",
+          "event_types": ["channel_occupied"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+Jinja2
+jinja2-cli
+ansible
+requests==2.31.0
+docker==6.1.3
+docker-compose
+pyyaml==5.3.1
