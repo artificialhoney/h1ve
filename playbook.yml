@@ -130,5 +130,6 @@
     - name: Start H1ve
       community.docker.docker_compose_v2:
         project_src: '{{ playbook_dir }}/src/h1ve'
-        env_file: '{{ playbook_dir }}/.env'
+        env_files:
+          - '{{ playbook_dir }}/.env'
       register: output
