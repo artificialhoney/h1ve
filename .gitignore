@@ -2,3 +2,4 @@
 .DS_Store
 .venv
 h1ve/**/docker-compose.yml
+.env
