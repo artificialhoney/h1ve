@@ -27,7 +27,7 @@ python3 -m venv $PTYHON_VENV_HOME
 echo -e "${BIGreen}venv available under $PTYHON_VENV_HOME${Color_Off}"
 
 echo -e "${BIPurple}Installing requirements in $H1VE_HOME${Color_Off}"
-$PIP_BIN install --quiet -r $H1VE_HOME/requirements.txt
+PYTHONWARNINGS="ignore::DeprecationWarning" $PIP_BIN install --quiet -r $H1VE_HOME/requirements.txt
 echo -e "${BIGreen}Ansible available via $ANSIBLE_BIN${Color_Off}"
 
 echo -e "${BIBlue}Running playbook $ANSIBLE_PLAYBOOK${Color_Off}"
