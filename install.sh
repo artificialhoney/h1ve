@@ -31,5 +31,5 @@ $PIP_BIN install --quiet -r $H1VE_HOME/requirements.txt
 echo -e "${BIGreen}Ansible available via $ANSIBLE_BIN${Color_Off}"
 
 echo -e "${BIBlue}Running playbook $ANSIBLE_PLAYBOOK${Color_Off}"
-ANSIBLE_CONFIG=$ANSIBLE_CONFIG sudo $ANSIBLE_PLAYBOOK_BIN $ANSIBLE_PLAYBOOK && \
+ANSIBLE_CONFIG=$ANSIBLE_CONFIG $ANSIBLE_PLAYBOOK_BIN $ANSIBLE_PLAYBOOK && \
 echo -e "${BIGreen}Installation successful!!!${Color_Off} 🌸"
