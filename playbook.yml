@@ -99,7 +99,7 @@
     - name: h1ve_config
       prompt: Please enter the H1ve config directory path
       private: false
-      default: '~/.h1ve'
+      default: '/home/{{ ansible_user }}/.h1ve'
   tasks:
     - name: Setup environment
       ansible.builtin.copy:
