@@ -111,6 +111,8 @@
 
 - name: Install H1ve
   hosts: localhost
+  remote_user: pi
+  become: true
   tags:
     - Install
     - H1ve
