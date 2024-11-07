@@ -123,15 +123,12 @@
       ansible.builtin.template:
         src: '{{ playbook_dir }}/src/h1ve/docker-compose.yml.j2'
         dest: '{{ playbook_dir }}/src/h1ve/docker-compose.yml'
-        owner: pi
-        group: pi
+        owner: '{{ ansible_user }}'
+        group: '{{ ansible_user }}'
         mode: '0644'
 
     - name: Start H1ve
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: '{{ playbook_dir }}/src/h1ve'
-        files:
-          - docker-compose.yml
         env_file: '{{ playbook_dir }}/.env'
-        state: present
       register: output
