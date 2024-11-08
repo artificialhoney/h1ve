@@ -1,8 +1,8 @@
 name: net
 version: 0.1.0
 services:
-  proxy:
-    image: traefik
+  traefik:
+    image: traefik/traefik:latest
     config: /etc/traefik/config/h1ve.yml
     ports:
       - 80:80
@@ -11,18 +11,28 @@ services:
       - 443:443
     socket: True
     command:
-      - '--api.insecure=true'
-      - '--providers.docker=true'
-      - '--providers.docker.exposedbydefault=true'
-      - '--providers.file.directory=/etc/traefik/config'
-      - '--providers.file.watch=true'
-      - '--entrypoints.web.address=:80'
-      - '--entrypoints.web.http.redirections.entryPoint.to=websecure'
-      - '--entrypoints.web.http.redirections.entryPoint.scheme=https'
-      - '--entryPoints.websecure.address=:443'
-      - '--entrypoints.ssh.address=:2222'
-      - '--certificatesresolvers.resolver.acme.tlschallenge=true'
-      - '--certificatesresolvers.resolver.acme.email=${H1VE_EMAIL}'
-      - '--certificatesresolvers.resolver.acme.storage=/letsencrypt/acme.json'
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=true
+      - --providers.file.directory=/etc/traefik/config
+      - --providers.file.watch=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entryPoints.websecure.address=:443
+      - --entrypoints.ssh.address=:2222
+      - --certificatesresolvers.resolver.acme.tlschallenge=true
+      - --certificatesresolvers.resolver.acme.email=${H1VE_EMAIL}
+      - --certificatesresolvers.resolver.acme.storage=/letsencrypt/acme.json
     volumes:
       - /letsencrypt
+  pihole:
+    image: pihole/pihole:latest
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 8088:80/tcp
+    volumes:
+      - /etc/pihole
+      - /etc/dnsmasq.d

@@ -1,0 +1,32 @@
+name: db
+version: 0.1.0
+services:
+  dbgate:
+    image: dbgate/dbgate:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - /root/.dbgate
+  mariadb:
+    image: mariadb/mariadb:latest
+    command:
+      - --init-file
+      - /data/application/init.sql
+      - --innodb-buffer-pool-size=512M
+      - --transaction-isolation=READ-COMMITTED
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci --max-connections=512
+      - --innodb-rollback-on-timeout=OFF
+      - --innodb-lock-wait-timeout=120
+    volumes:
+      - /var/lib/mysql
+      - /data/application/init.sql
+  postgres:
+    image: postgres/postgres:latest
+    command:
+      - postgres
+      - -c
+      - max_connections=200
+    volumes:
+      - /var/lib/postgresql/data
+      - /docker-entrypoint-initdb.d/init.sql

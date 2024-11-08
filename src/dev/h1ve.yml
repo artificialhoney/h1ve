@@ -1,0 +1,16 @@
+name: dev
+version: 0.1.0
+services:
+  gitea:
+    image: gitea/gitea:latest
+    volumes:
+      - /data
+  ci:
+    image: woodpeckerci/woodpecker-server:latest
+    volumes:
+      - /var/lib/woodpecker
+  agent:
+    image: woodpeckerci/woodpecker-agent:latest
+    command:
+      - agent
+    socket: True

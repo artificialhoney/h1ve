@@ -92,6 +92,11 @@
     - H1ve
   vars:
     ansible_common_remote_group: docker
+    h1ve_layers:
+      - core
+      - data
+      - db
+      - net
   vars_prompt:
     - name: h1ve_data
       prompt: Please enter the H1ve data directory path
@@ -117,21 +122,19 @@
       community.docker.docker_network:
         name: h1ve
 
-    - name: Include h1ve.yml
-      ansible.builtin.include_vars:
-        file: '{{ playbook_dir }}/src/h1ve/h1ve.yml'
-
-    - name: Create docker-compose.yml
-      ansible.builtin.template:
-        src: '{{ playbook_dir }}/src/h1ve/app/docker-compose.yml.j2'
-        dest: '{{ playbook_dir }}/src/h1ve/docker-compose.yml'
-        owner: '{{ ansible_user }}'
-        group: '{{ ansible_user }}'
-        mode: '0644'
+    - name: Generate docker-compose.yml
+      include_role:
+        name: h1ve
+        tasks_from: generate.yml
+      loop: '{{ h1ve_layers }}'
+      loop_control:
+        loop_var: layer_name
 
     - name: Start H1ve
       community.docker.docker_compose_v2:
-        project_src: '{{ playbook_dir }}/src/h1ve'
+        project_src: '{{ playbook_dir }}/src/{{ item }}'
         env_files:
+          - '{{ playbook_dir }}/src/{{ item }}/*.env'
           - '{{ playbook_dir }}/.env'
+      loop: '{{ h1ve_layers }}'
       register: output

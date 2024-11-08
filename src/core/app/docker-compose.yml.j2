@@ -1,35 +1,34 @@
 services:
   app:
-    image: ghcr.io/artificialhoney/h1ve
-    container_name: h1ve-{{ name }}-app
-    volumes:
-        - ./app:/app
+    image: h1ve-{{ layer.name }}-app:{{ layer.version }}
+    build: .
+    container_name: h1ve-{{ layer.name }}-app
 
 {% if services is defined %}
 {% for service in services %}
-  {{ service }}:
-    image: {{ services[service].image }}
-    container_name: h1ve-{{ name }}-{{ service }}
+  {{ layer.service }}:
+    image: {{ layer.services[service].image }}
+    container_name: h1ve-{{ layer.name }}-{{ layer.service }}
     restart: unless-stopped
 {% if services[service].command is defined %}
     command:
 {% for command in services[service].command %}
-      - {{ command }}
+      - {{ layer.command }}
 {% endfor %}
 {% endif %}
 {% if services[service].ports is defined %}
     ports:
 {% for port in services[service].ports %}
-      - {{ port }}
+      - {{ layer.port }}
 {% endfor %}
 {% endif %}
     volumes:
 {% if services[service].config is defined %}
-      - ${H1VE_CONFIG}/{{ name }}/{{ service }}:{{ services[service].config }}
+      - ${H1VE_CONFIG}/{{ layer.name }}/{{ layer.service }}:{{ layer.services[service].config }}
 {% endif %}
 {% if services[service].volumes is defined %}
 {% for volume in services[service].volumes %}
-      - ${H1VE_DATA}/{{ name }}/{{ service }}{{ volume }}:{{ volume }}
+      - ${H1VE_DATA}/{{ layer.name }}/{{ layer.service }}{{ layer.volume }}:{{ layer.volume }}
 {% endfor %}
 {% endif %}
 {% if services[service].socket == True %}
