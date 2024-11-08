@@ -1,6 +1,5 @@
 services:
   app:
-    image: h1ve-{{ layer.name }}-app:{{ layer.version }}
     build:
       context: .
     container_name: h1ve-{{ layer.name }}-app
