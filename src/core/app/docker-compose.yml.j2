@@ -3,6 +3,8 @@ services:
     build:
       context: ./app
     container_name: h1ve-{{ layer.name }}-app
+    networks:
+      - h1ve
 
 {% if layer.services is defined %}
 {% for service in layer.services %}
