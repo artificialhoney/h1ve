@@ -22,11 +22,11 @@ services:
       - {{ port }}
 {% endfor %}
 {% endif %}
-    volumes:
 {% if layer.services[service].config is defined %}
       - ${H1VE_CONFIG}/{{ layer.name }}/{{ service }}:{{ layer.services[service].config }}
 {% endif %}
 {% if layer.services[service].volumes is defined %}
+    volumes:
 {% for volume in layer.services[service].volumes %}
       - ${H1VE_DATA}/{{ layer.name }}/{{ service }}{{ volume }}:{{ volume }}
 {% endfor %}
