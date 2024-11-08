@@ -134,7 +134,7 @@
       community.docker.docker_compose_v2:
         project_src: '{{ playbook_dir }}/src/{{ item }}'
         env_files:
-          - '{{ playbook_dir }}/src/{{ item }}/*.env'
+          - '{{ playbook_dir }}/src/{{ item }}/layer.env'
           - '{{ playbook_dir }}/.env'
       loop: '{{ h1ve_layers }}'
       register: output

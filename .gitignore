@@ -4,21 +4,21 @@
 .env
 .vscode
 
-src
+/src/*
 
-!src/core
-!src/core/**
+!/src/core
+!/src/core/**
 
-!src/data
-!src/data/**
+!/src/data
+!/src/data/**
 
-!src/db
-!src/db/**
+!/src/db
+!/src/db/**
 
-!src/dev
-!src/dev/**
+!/src/dev
+!/src/dev/**
 
-!src/net
-!src/net/**
+!/src/net
+!/src/net/**
 
-src/**/docker-compose.yml
+/src/**/docker-compose.yml
