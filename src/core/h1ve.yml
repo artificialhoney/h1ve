@@ -2,4 +2,4 @@ name: core
 version: 0.1.0
 services:
   redis:
-    image: redis/redis:latest
+    image: redis:latest

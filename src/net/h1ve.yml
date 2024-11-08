@@ -2,7 +2,7 @@ name: net
 version: 0.1.0
 services:
   traefik:
-    image: traefik/traefik:latest
+    image: traefik:latest
     config: /etc/traefik/config/h1ve.yml
     ports:
       - 80:80
