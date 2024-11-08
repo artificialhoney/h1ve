@@ -19,7 +19,7 @@ which python3 >> /dev/null || sudo apt-get install -y -qq python3
 echo -e "${BIGreen}git, python3 are installed${Color_Off}"
 
 echo -e "${BIPurple}Cloning artificialhoney/h1ve into $H1VE_HOME${Color_Off}"
-stat $H1VE_HOME && git clone --quiet --depth 1 https://github.com/artificialhoney/h1ve.git $H1VE_HOME || exit 1
+stat $H1VE_HOME >> /dev/null && git clone --quiet --depth 1 https://github.com/artificialhoney/h1ve.git $H1VE_HOME || exit 1
 echo -e "${BIGreen}Codebase available under $H1VE_HOME${Color_Off}"
 
 echo -e "${BIPurple}Installing virtual environment in $H1VE_HOME${Color_Off}"
