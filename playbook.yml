@@ -98,6 +98,10 @@
       - db
       - net
   vars_prompt:
+    - name: h1ve_email
+      prompt: Please enter your email
+      private: false
+
     - name: h1ve_data
       prompt: Please enter the H1ve data directory path
       private: false
@@ -111,6 +115,7 @@
     - name: Setup environment
       ansible.builtin.copy:
         content: |
+          H1VE_EMAIL={{ h1ve_email }}
           H1VE_DATA={{ h1ve_data }}
           H1VE_CONFIG={{ h1ve_config }}
         dest: '{{ playbook_dir }}/.env'
