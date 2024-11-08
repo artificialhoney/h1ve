@@ -1,8 +1,9 @@
 ---
 - name: Install Docker
   hosts: localhost
+  no_log: True
   remote_user: pi
-  become: true
+  become: True
   vars:
     arch_mapping: # Map ansible architecture {{ ansible_architecture }} names to Docker's architecture names
       x86_64: amd64
@@ -13,7 +14,7 @@
   tasks:
     - name: Update and upgrade all packages to the latest version
       ansible.builtin.apt:
-        update_cache: true
+        update_cache: True
         upgrade: dist
         cache_valid_time: 3600
 
@@ -55,7 +56,7 @@
       ansible.builtin.apt:
         name: '{{ item }}'
         state: present
-        update_cache: true
+        update_cache: True
       loop:
         - docker-ce
         - docker-ce-cli
@@ -72,12 +73,12 @@
       ansible.builtin.user:
         name: '{{ ansible_user }}'
         groups: docker
-        append: true
+        append: True
 
     - name: Enable and start Docker services
       ansible.builtin.systemd:
         name: '{{ item }}'
-        enabled: true
+        enabled: True
         state: started
       loop:
         - docker.service
@@ -85,8 +86,9 @@
 
 - name: Install H1ve
   hosts: localhost
+  no_log: True
   remote_user: pi
-  become: true
+  become: True
   tags:
     - Install
     - H1ve
