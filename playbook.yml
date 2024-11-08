@@ -100,21 +100,6 @@
     h1ve_data: /srv/h1ve
     h1ve_config: /home/pi/.h1ve
   tasks:
-    - name: H1ve email
-      ansible.builtin.pause:
-        prompt: Please enter your email
-      register: h1ve_email
-
-    - name: H1ve data
-      ansible.builtin.pause:
-        prompt: Please enter the data path ({{ h1ve_data }})
-      register: h1ve_data_user
-
-    - name: H1ve config
-      ansible.builtin.pause:
-        prompt: Please enter the config path ({{ h1ve_config }})
-      register: h1ve_config_user
-
     - name: Setup environment
       ansible.builtin.copy:
         content: |

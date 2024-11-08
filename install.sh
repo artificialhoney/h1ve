@@ -19,7 +19,7 @@ which python3 >> /dev/null || sudo apt-get install -y -qq python3
 echo -e "${BIGreen}git, python3 are installed${Color_Off}"
 
 echo -e "${BIPurple}Cloning artificialhoney/h1ve into $H1VE_HOME${Color_Off}"
-git clone --quiet --depth 1 https://github.com/artificialhoney/h1ve.git $H1VE_HOME
+stat $H1VE_HOME && git clone --quiet --depth 1 https://github.com/artificialhoney/h1ve.git $H1VE_HOME || exit 1
 echo -e "${BIGreen}Codebase available under $H1VE_HOME${Color_Off}"
 
 echo -e "${BIPurple}Installing virtual environment in $H1VE_HOME${Color_Off}"
@@ -30,6 +30,13 @@ echo -e "${BIPurple}Installing requirements in $H1VE_HOME${Color_Off}"
 $PIP_BIN install --quiet --use-pep517 -r $H1VE_HOME/requirements.txt
 echo -e "${BIGreen}Ansible available via $ANSIBLE_BIN${Color_Off}"
 
+read -p "${BIPurple}Enter H1ve email:${Color_Off} " H1VE_EMAIL
+read -p "${BIPurple}Enter H1ve data directory${Color_Off} [/srv/h1ve]: " H1VE_DATA
+H1VE_DATA=${H1VE_DATA:-/srv/h1ve}
+read -p "${BIPurple}Enter H1ve config directory${Color_Off} [/home/pi/.h1ve]: " H1VE_CONFIG
+H1VE_CONFIG=${H1VE_CONFIG:-/home/pi/.h1ve}
+
 echo -e "${BIBlue}Running playbook $ANSIBLE_PLAYBOOK${Color_Off}"
-ANSIBLE_CONFIG=$ANSIBLE_CONFIG $ANSIBLE_PLAYBOOK_BIN $ANSIBLE_PLAYBOOK && \
+ANSIBLE_CONFIG=$ANSIBLE_CONFIG $ANSIBLE_PLAYBOOK_BIN $ANSIBLE_PLAYBOOK \
+-e "h1ve_email=$H1VE_EMAIL" -e "h1ve_data=$H1VE_DATA" -e "h1ve_config=$H1VE_CONFIG" && \
 echo -e "${BIGreen}Installation successful!!!${Color_Off} 🌸"
