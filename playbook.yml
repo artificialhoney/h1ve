@@ -90,6 +90,8 @@
   tags:
     - Install
     - H1ve
+  vars:
+    ansible_common_remote_group: docker
   vars_prompt:
     - name: h1ve_data
       prompt: Please enter the H1ve data directory path
@@ -132,5 +134,4 @@
         project_src: '{{ playbook_dir }}/src/h1ve'
         env_files:
           - '{{ playbook_dir }}/.env'
-        action_group: docker
       register: output
