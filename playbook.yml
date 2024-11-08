@@ -1,7 +1,6 @@
 ---
 - name: Install Docker
   hosts: localhost
-  no_log: True
   remote_user: pi
   become: True
   vars:
@@ -86,7 +85,6 @@
 
 - name: Install H1ve
   hosts: localhost
-  no_log: True
   remote_user: pi
   become: True
   tags:
