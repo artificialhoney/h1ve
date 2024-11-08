@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: .
+      context: ./app
     container_name: h1ve-{{ layer.name }}-app
 
 {% if services is defined %}
