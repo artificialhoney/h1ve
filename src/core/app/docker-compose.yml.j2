@@ -10,6 +10,9 @@ services:
     image: {{ layer.services[service].image }}
     container_name: h1ve-{{ layer.name }}-{{ service }}
     restart: unless-stopped
+    env_file:
+      - path: ./{{ service }}.env
+        required: false
 {% if layer.services[service].command is defined %}
     command:
 {% for command in layer.services[service].command %}

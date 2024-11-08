@@ -97,27 +97,30 @@
       - data
       - db
       - net
-  vars_prompt:
-    - name: h1ve_email
-      prompt: Please enter your email
-      private: false
-
-    - name: h1ve_data
-      prompt: Please enter the H1ve data directory path
-      private: false
-      default: /srv/h1ve
-
-    - name: h1ve_config
-      prompt: Please enter the H1ve config directory path
-      private: false
-      default: '/home/pi/.h1ve'
+    h1ve_data: /srv/h1ve
+    h1ve_config: /home/pi/.h1ve
   tasks:
+    - name: H1ve email
+      ansible.builtin.pause:
+        prompt: Please enter your email
+      register: h1ve_email
+
+    - name: H1ve data
+      ansible.builtin.pause:
+        prompt: Please enter the data path ({{ h1ve_data }})
+      register: h1ve_data_user
+
+    - name: H1ve config
+      ansible.builtin.pause:
+        prompt: Please enter the config path ({{ h1ve_config }})
+      register: h1ve_config_user
+
     - name: Setup environment
       ansible.builtin.copy:
         content: |
           H1VE_EMAIL={{ h1ve_email }}
-          H1VE_DATA={{ h1ve_data }}
-          H1VE_CONFIG={{ h1ve_config }}
+          H1VE_DATA={{ h1ve_data_user if h1ve_data_user else h1ve_data }}
+          H1VE_CONFIG={{ h1ve_config_user if h1ve_config_user else h1ve_config }}
         dest: '{{ playbook_dir }}/.env'
         owner: '{{ ansible_user }}'
         group: '{{ ansible_user }}'
@@ -139,7 +142,6 @@
       community.docker.docker_compose_v2:
         project_src: '{{ playbook_dir }}/src/{{ item }}'
         env_files:
-          - 'h1ve.env'
           - '{{ playbook_dir }}/.env'
       loop: '{{ h1ve_layers }}'
       register: output
