@@ -1,5 +1,24 @@
 # h1ve
 .DS_Store
 .venv
-h1ve/**/docker-compose.yml
 .env
+.vscode
+
+src
+
+!src/core
+!src/core/**
+
+!src/data
+!src/data/**
+
+!src/db
+!src/db/**
+
+!src/dev
+!src/dev/**
+
+!src/net
+!src/net/**
+
+src/**/docker-compose.yml
