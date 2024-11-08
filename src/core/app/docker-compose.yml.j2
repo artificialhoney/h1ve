@@ -4,34 +4,34 @@ services:
       context: ./app
     container_name: h1ve-{{ layer.name }}-app
 
-{% if services is defined %}
-{% for service in services %}
-  {{ layer.service }}:
+{% if layer.services is defined %}
+{% for service in layer.services %}
+  {{ service }}:
     image: {{ layer.services[service].image }}
-    container_name: h1ve-{{ layer.name }}-{{ layer.service }}
+    container_name: h1ve-{{ layer.name }}-{{ service }}
     restart: unless-stopped
-{% if services[service].command is defined %}
+{% if layer.services[service].command is defined %}
     command:
-{% for command in services[service].command %}
-      - {{ layer.command }}
+{% for command in layer.services[service].command %}
+      - {{ command }}
 {% endfor %}
 {% endif %}
-{% if services[service].ports is defined %}
+{% if layer.services[service].ports is defined %}
     ports:
-{% for port in services[service].ports %}
-      - {{ layer.port }}
+{% for port in layer.services[service].ports %}
+      - {{ port }}
 {% endfor %}
 {% endif %}
     volumes:
-{% if services[service].config is defined %}
-      - ${H1VE_CONFIG}/{{ layer.name }}/{{ layer.service }}:{{ layer.services[service].config }}
+{% if layer.services[service].config is defined %}
+      - ${H1VE_CONFIG}/{{ layer.name }}/{{ service }}:{{ layer.services[service].config }}
 {% endif %}
-{% if services[service].volumes is defined %}
-{% for volume in services[service].volumes %}
-      - ${H1VE_DATA}/{{ layer.name }}/{{ layer.service }}{{ layer.volume }}:{{ layer.volume }}
+{% if layer.services[service].volumes is defined %}
+{% for volume in layer.services[service].volumes %}
+      - ${H1VE_DATA}/{{ layer.name }}/{{ service }}{{ volume }}:{{ volume }}
 {% endfor %}
 {% endif %}
-{% if services[service].socket == True %}
+{% if layer.services[service].socket == True %}
       - /var/run/docker.sock:/var/run/docker.sock
 {% endif %}
     networks:
