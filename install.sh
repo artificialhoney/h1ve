@@ -30,10 +30,10 @@ echo -e "${BIPurple}Installing requirements in $H1VE_HOME${Color_Off}"
 $PIP_BIN install --quiet --use-pep517 -r $H1VE_HOME/requirements.txt
 echo -e "${BIGreen}Ansible available via $ANSIBLE_BIN${Color_Off}"
 
-read -p "${BIPurple}Enter H1ve email:${Color_Off} " H1VE_EMAIL
-read -p "${BIPurple}Enter H1ve data directory${Color_Off} [/srv/h1ve]: " H1VE_DATA
+read -p "Enter H1ve email: " H1VE_EMAIL
+read -p "Enter H1ve data directory [/srv/h1ve]: " H1VE_DATA
 H1VE_DATA=${H1VE_DATA:-/srv/h1ve}
-read -p "${BIPurple}Enter H1ve config directory${Color_Off} [/home/pi/.h1ve]: " H1VE_CONFIG
+read -p "Enter H1ve config directory [/home/pi/.h1ve]: " H1VE_CONFIG
 H1VE_CONFIG=${H1VE_CONFIG:-/home/pi/.h1ve}
 
 echo -e "${BIBlue}Running playbook $ANSIBLE_PLAYBOOK${Color_Off}"
