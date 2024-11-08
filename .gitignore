@@ -1,7 +1,7 @@
 # h1ve
 .DS_Store
 .venv
-.env
+/.env
 .vscode
 
 /src/*
