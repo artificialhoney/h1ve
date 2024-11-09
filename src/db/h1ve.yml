@@ -20,7 +20,8 @@ services:
       - --innodb-lock-wait-timeout=120
     volumes:
       - /var/lib/mysql
-      - /data/application/init.sql
+    secrets:
+      - MARIADB_ROOT_PASSWORD
   postgres:
     image: postgres:latest
     command:
@@ -29,4 +30,5 @@ services:
       - max_connections=200
     volumes:
       - /var/lib/postgresql/data
-      - /docker-entrypoint-initdb.d/init.sql
+    secrets:
+      - POSTGRES_PASSWORD

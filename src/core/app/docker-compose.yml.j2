@@ -41,8 +41,24 @@ services:
 {% if layer.services[service].socket is defined and layer.services[service].socket == True %}
       - /var/run/docker.sock:/var/run/docker.sock
 {% endif %}
+{% if layer.services[service].secrets is defined %}
+    secrets:
+{% for secret in layer.services[service].secrets %}
+      - {{ secret }}
+{% endfor %}
+{% endif %}
     networks:
       - h1ve
+{% endfor %}
+
+{% for service in layer.services if layer.services[service].secrets is defined %}
+{% if loop.first %}
+secrets:
+{% endif %}
+{% for secret in layer.services[service].secrets %}
+  {{ secret }}:
+    file: ${H1VE_SECRETS}/{{ secret }}
+{% endfor %}
 {% endfor %}
 {% endif %}
 

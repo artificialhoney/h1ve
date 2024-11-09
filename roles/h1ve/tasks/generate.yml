@@ -1,9 +1,17 @@
-- name: Include h1ve.yml
+- name: 'Include {{ layer_name }}/h1ve.yml'
   ansible.builtin.include_vars:
     file: '{{ playbook_dir }}/src/{{ layer_name }}/h1ve.yml'
     name: layer
 
-- name: Create docker-compose.yml
+- name: 'Check services from {{ layer_name }}'
+  include_role:
+    name: h1ve
+    tasks_from: service.yml
+  loop: "{{ layer['services'] | dict2items | map(attribute='value') }}"
+  loop_control:
+    loop_var: service
+
+- name: 'Create {{ layer_name }}/docker-compose.yml'
   ansible.builtin.template:
     src: '{{ playbook_dir }}/src/core/app/docker-compose.yml.j2'
     dest: '{{ playbook_dir }}/src/{{ layer_name }}/docker-compose.yml'

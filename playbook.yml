@@ -107,6 +107,7 @@
           H1VE_EMAIL={{ h1ve_email }}
           H1VE_DATA={{ h1ve_data }}
           H1VE_CONFIG={{ h1ve_config }}
+          H1VE_SECRETS={{ h1ve_config }}/.secrets
         dest: '{{ playbook_dir }}/.env'
         owner: '{{ ansible_user }}'
         group: '{{ ansible_user }}'
@@ -115,6 +116,11 @@
     - name: Create network
       community.docker.docker_network:
         name: h1ve
+
+    - name: Creates secrets directory
+      ansible.builtin.file:
+        path: '{{ h1ve_config }}/.secrets'
+        state: directory
 
     - name: Generate docker-compose.yml
       include_role:
