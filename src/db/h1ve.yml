@@ -9,6 +9,8 @@ services:
       - /root/.dbgate
   mariadb:
     image: mariadb:latest
+    ports:
+      - 3306:3306
     command:
       - --init-file
       - /data/application/init.sql
@@ -24,6 +26,8 @@ services:
       - MARIADB_ROOT_PASSWORD
   postgres:
     image: postgres:latest
+    ports:
+      - 5432:5432
     command:
       - postgres
       - -c
