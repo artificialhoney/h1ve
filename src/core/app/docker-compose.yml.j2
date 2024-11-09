@@ -2,7 +2,31 @@ services:
   app:
     build:
       context: ./app
+      tags:
+        - h1ve-{{ layer.name }}-app:{{ layer.version }}
+        - h1ve-{{ layer.name }}-app:latest
     container_name: h1ve-{{ layer.name }}-app
+{% if layer.services is defined %}
+    depends_on:
+{% for service in layer.services %}
+      - {{ service }}
+{% endfor %}
+{% for service in layer.services if layer.services[service].secrets is defined %}
+{% if loop.first %}
+    secrets:
+{% endif %}
+{% for secret in layer.services[service].secrets %}
+      - {{ secret }}
+{% endfor %}
+{% endfor %}
+{% endif %}
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - path: ./app.env
+        required: false
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - h1ve
 
