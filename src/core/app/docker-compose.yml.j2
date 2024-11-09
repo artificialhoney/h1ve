@@ -3,6 +3,7 @@ services:
     build:
       context: ./app
     container_name: h1ve-{{ layer.name }}-app
+    hostname: {{ layer.name }}-app
     networks:
       - h1ve
 
@@ -11,6 +12,7 @@ services:
   {{ service }}:
     image: {{ layer.services[service].image }}
     container_name: h1ve-{{ layer.name }}-{{ service }}
+    hostname: {{ layer.name }}-{{ service }}
     restart: unless-stopped
     env_file:
       - path: ./{{ service }}.env
